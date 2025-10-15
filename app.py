@@ -48,14 +48,34 @@ def load_and_process_data():
     global movies_data, similarity, vectorizer, feature_vectors
     
     try:
-        logger.info("Loading movie dataset...")
-        # Load dataset
-        movies_data = pd.read_csv('movies.csv')
-        logger.info(f"Successfully loaded {len(movies_data)} movies from CSV")
+        logger.info("Loading movie datasets...")
+        # Load Hollywood dataset
+        hollywood_data = pd.read_csv('movies.csv')
+        logger.info(f"Successfully loaded {len(hollywood_data)} Hollywood movies from CSV")
         
-        # Limit to first 1000 movies for faster processing
-        movies_data = movies_data.head(1000)
-        logger.info(f"Processing first {len(movies_data)} movies...")
+        # Load Bollywood dataset
+        bollywood_data = pd.read_csv('IMDB-Movie-Dataset(2023-1951).csv')
+        logger.info(f"Successfully loaded {len(bollywood_data)} Bollywood movies from CSV")
+        
+        # Limit Hollywood data to first 1000 movies for faster processing
+        hollywood_data = hollywood_data.head(1000)
+        logger.info(f"Processing first {len(hollywood_data)} Hollywood movies...")
+        
+        # Process Bollywood data - take only needed columns and rename to match Hollywood data
+        bollywood_processed = bollywood_data.rename(columns={
+            'movie_name': 'title',
+            'genre': 'genres',
+            'overview': 'keywords',  # Using overview as keywords for Bollywood movies
+            'cast': 'cast',
+            'director': 'director'
+        })
+        
+        # Add missing columns for Bollywood data to match Hollywood data structure
+        bollywood_processed['tagline'] = ''  # Bollywood dataset doesn't have tagline
+        
+        # Combine both datasets
+        movies_data = pd.concat([hollywood_data, bollywood_processed], ignore_index=True)
+        logger.info(f"Combined dataset has {len(movies_data)} movies ({len(hollywood_data)} Hollywood + {len(bollywood_data)} Bollywood)")
         
         # Select relevant features
         selected_features = ['genres', 'keywords', 'tagline', 'cast', 'director']
@@ -70,11 +90,11 @@ def load_and_process_data():
         # Combine features into a single string
         logger.info("Combining movie features...")
         combined_features = (
-            movies_data['genres'] + ' ' +
-            movies_data['keywords'] + ' ' +
-            movies_data['tagline'] + ' ' +
-            movies_data['cast'] + ' ' +
-            movies_data['director']
+            movies_data['genres'].astype(str) + ' ' +
+            movies_data['keywords'].astype(str) + ' ' +
+            movies_data['tagline'].astype(str) + ' ' +
+            movies_data['cast'].astype(str) + ' ' +
+            movies_data['director'].astype(str)
         )
         
         # Convert text to feature vectors
