@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaAI - Movie Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <h1>CinemaAI</h1>
+            </div>
+            <p class="tagline">Discover your next favorite movie</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="search-section">
+                <div class="search-container">
+                    <h2>Find Similar Movies</h2>
+                    <p class="subtitle">Enter a movie you love, and we'll find similar ones you'll enjoy</p>
+                    
+                    <div class="input-group">
+                        <div class="search-input-container">
+                            <input type="text" id="movieInput" placeholder="Type a movie name..." autocomplete="off">
+                            <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                        </div>
+                        <div class="recommendations-count">
+                            <label for="numRecommendations">Number of recommendations:</label>
+                            <select id="numRecommendations">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
+                        <button id="searchBtn" class="search-btn">
+                            <i class="fas fa-search"></i>
+                            Get Recommendations
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingSpinner" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <p>Finding amazing movies for you...</p>
+            </div>
+
+            <div id="errorMessage" class="error-message hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="errorText"></p>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <div class="results-header">
+                    <h3>Because you liked <span id="inputMovieTitle"></span></h3>
+                    <p class="results-subtitle">Here are movies you might love</p>
+                </div>
+
+                <div id="movieGrid" class="movie-grid">
+                    <!-- Movie cards will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 CinemaAI. Powered by Machine Learning & Love for Movies</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
